@@ -1,0 +1,16 @@
+header, artcle, section {
+	display: block
+}
+
+header {
+	font-weight: bold
+}
+
+
+.no-cssgradients .glossy {
+    background: url("images/glossybutton.png");
+}
+
+.cssgradients .glossy {
+    background-image: linear-gradient(top, #555, #333);
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>QUICKSORT</title>
+</head>
+<body>
+<h1>QUICKSORT</h1>
+<script>
+var j = 0;
+function quicksort(a, primo, ultimo){
+	console.log(a);
+	console.log("primo: " + primo + ", ultimo: " + ultimo);
+	if (primo<ultimo){
+		perno(a,primo,ultimo,j);
+		quicksort(a,primo,j-1);
+		quicksort(a,j+1,ultimo);
+	}
+}
+
+function perno(a, primo, ultimo, j){
+	var x = a[primo];
+	j = primo;
+	var temp=0;
+	for(var i=primo; i<ultimo; i++){
+		if (a[i]<x){
+			j++;
+			temp=a[j];
+			a[j]=a[i];
+			a[i]=temp;
+		}
+		a[primo]=a[j];
+		a[j]=x;
+	}
+	console.log("perno: " + j);
+}
+var ar = [9,12,8,18,6,13,11,3,5,10];
+quicksort(ar,0,9);
+</script>
+</body>
+</html>

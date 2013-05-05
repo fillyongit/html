@@ -1,0 +1,23 @@
+<script>
+// Javascript è un linguaggio che usa il lexical scope (o static scope), cioè
+// la visibilità di una variabile è collegata alla "porzione" o blocco
+// di codice della funzione nella quale è definita (nel global scope altrimenti),
+// come accade per quasi tutti i linguaggi tranne quelli (pochi) che usano
+// il dynamic scoping.
+
+var variable = "top-level";
+function parentFunction() {
+  var variable = "local";
+  function childFunction() {
+    console.log(variable);
+  }
+  return childFunction;
+}
+
+var child = parentFunction();
+child();
+
+// Nonostante parentFunction() sia già stata eseguita la variabile interna
+// a child() ancora tiene un riferimento a quella definita in parentFunction(),
+// cioè in pratica l'ambiente locale dei parentFunction() esiste ancora.
+</script>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Backbone</title>
+<script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript" src="js/json2.js"></script>
+<script type="text/javascript" src="js/underscore-min.js"></script>
+<script type="text/javascript" src="js/backbone-min.js"></script>
+
+<script>
+
+/************** MODELLI **************/
+// Ereditarietà. Avviene tramite un sapiente uso di "extend", che costruisce
+// la giusta catena di prototipi.
+var Note = Backbone.Model.extend({
+
+  initialize: function() { },
+
+  author: function() { },
+
+  coordinates: function() { },
+
+  allowedToEdit: function(account) {
+    return true;
+  }
+
+});
+
+var PrivateNote = Note.extend({
+  allowedToEdit: function(account) {
+    return account.owns(this);
+  }
+});
+
+
+// INIZIALIZZAZIONE di modelli. Funzione initialize.
+var Sidebar = Backbone.Model.extend({
+	
+  initialize: function() {
+	  this.set({color: "white"})
+  },
+  
+  // Attributi di default.
+  defaults: {
+	  color: "black"
+  },
+  
+  promptColor: function() {
+    var cssColor = prompt("Please enter a CSS color:");
+    this.set({color: cssColor});
+  }
+});
+
+// ATTRIBUTI
+// Posso passare gli attributi al costruttore, seguendo
+// la firma new Model([attributes]), oppure
+// nel costruttore se c'è (initialize), oppure usando la
+// proprietà defaults.
+// Si può usare la funzione set (get).
+// Agli attributi si può legare l'evento change. Se si passa l'attributo "silent" uguale a TRUE
+// come attributi, i cambiamenti agli attributi non scatenano eventi.
+window.sidebar = new Sidebar({color: "red"});
+sidebar.bind('change:color', function(model, color) {
+	  $('#sidebar').css({background: color});
+});
+sidebar.set({color: 'white'});
+
+// POPOLAMENTO
+// Dialogo con il database o altri meccansmi di salvataggio dati (tipo l'HTML5 localStorage).
+var Orders = BackBone.Model.Extend({
+	
+});
+// Fetch a Save chiamano dietro le quinte Backbone.sync(), che può essere sovrascritto per
+// implementare le chiamate CRUD (create, read, update, delete). Il save 
+// genera un create se il metodo isNew del model restituisce vero o un update se invece restituisce falso.
+// Il Fetch credo che corrisonda ad un read.
+// Fetch scatena l'evento change se ci sono differenze tra lo stato
+// dell'oggeto sul server e quello corrente, cioè se cambia almeno un attributo.
+Orders.fetch({error: function() {
+		// Se il server risponde con un codice diverso da 200 (OK),
+		// viene chiamata questa funzione.
+	},
+	success: function() {
+		
+	}
+});
+// Prima di salvare viene chimaato il metodo validate del model se esiste.
+Orders.save({product: "Scopa Pippo"}, {error: function() {}});
+
+</script>
+</head>
+<body>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!--  
+Modernizr sostituisce no-js con js se il browser ha il supporto attivato,
+Inoltre aggiunge tante altre classi, una per ogni feature nuova di html5 
+prefissate con no- se il browser non le supporta. Vedere con Chrome.
+ -->
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8" />
+<title>Modernizr</title>
+<script src="js/modernizr-2.0.6.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+</head>
+<body>
+
+<!-- 
+Modernizr runs through a little loop in JavaScript to enable 
+the various elements from HTML5 (as well as abbr) for styling 
+in Internet Explorer.
+ -->
+<section class="glossy">
+	<header>Header</header>
+	<article>Article</article>
+</section>
+<script>
+ Modernizr.load([{
+    load: '//ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.js',
+    complete: function () {
+      if ( !window.jQuery ) {
+            Modernizr.load('js/jquery-1.6.2.min.js');
+      }
+
+      alert(Modernizr.mq('only screen and (max-width: 768px)'));
+    }
+  },
+  {
+	  test: Modernizr.geolocation,
+	  yep : 'js/geo.js',
+	  nope: 'js/geo-polyfill.js'
+  },
+  {
+	  // This just has to be truthy
+	  test : Modernizr.websockets && window.JSON,
+	  // socket-io.js and json2.js
+	  nope : 'js/functional-polyfills.js',
+	  // You can also give arrays of resources to load.
+	  both : [ 'js/app.js', 'js/extra.js' ],
+	  complete : function () {
+	    // Run this after everything in this group has downloaded
+	    // and executed, as well everything in all previous groups
+	    myApp.init();
+	  }
+  },  
+  {
+    // This will wait for the fallback to load and
+    // execute if it needs to.
+    load: 'js/script.js',
+    complete: function () {
+    	alert('script.js loaded complete!');
+    },
+    callback: function(url, result, key) {
+    	alert('script.js callback!' + (url, result, key));
+    }
+  }]);
+</script>
+</body>
+</html>

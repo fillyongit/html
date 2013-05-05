@@ -1,0 +1,65 @@
+<script>
+/*
+ * Ci sono funzioni che sono high-level function cioè agiscono da contenitori o usano altre
+ funzioni per eseguire il prprio compito.
+ */
+
+function forEach(array, action) {
+	  for (var i = 0; i < array.length; i++)
+	    action(array[i]);
+}
+	
+function sum(numbers) {
+	  var total = 0;
+	  forEach(numbers, function (number) {
+	    total += number;
+	  });
+	  return total;
+}
+console.log(sum([1, 10, 100]));
+
+
+function negate(func) {
+  return function(x) {
+    return !func(x);
+    // oppure se sappiamo che la funzione
+    // potrà essere invoca ta con più argomenti
+    // usiamo apply e l'array arguments:
+    //
+    //return !func.apply(null, arguments);
+  };
+}
+var isNotNaN = negate(isNaN);
+console.log(isNotNaN(NaN));
+
+// Classici esempio di high-level functions
+// che lavorano su array.
+// REDUCE. Riduce/combina gli elementi contenuti in un array ad un valore e lo restituisce.
+function reduce(combine, base, array) {
+  forEach(array, function (element) {
+    base = combine(base, element);
+  });
+  return base;
+}
+function add(a, b) {
+  return a + b;
+}
+
+function sum(numbers) {
+  return reduce(add, 0, numbers);
+}
+console.log(sum([1,2,3]));
+
+
+// MAP.
+// Applica am tutti gli elementi di un aray una funzione restituendo
+// in pratica un nuovo array.
+function map(func, array) {
+  var result = [];
+  forEach(array, function (element) {
+    result.push(func(element));
+  });
+  return result;
+}
+console.log(map(Math.round, [0.01, 2, 9.89, Math.PI]));
+</script>

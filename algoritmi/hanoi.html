@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>HANOI</title>
+</head>
+<body>
+<h1>HANOI</h1>
+<script>
+function hanoiRicorsivo(nDischi, orig, dest, inter) {
+	if (nDischi === 1) 
+		console.log("Trasferisci un disco da " + orig + ' a ' + dest);
+	else {
+		hanoiRicorsivo(nDischi-1, orig, inter, dest);
+		console.log("Trasferisci un disco da " + orig + ' a ' + dest);
+		hanoiRicorsivo(nDischi-1, inter, dest, orig);
+	}
+}
+
+function hanoiIterativo(nDischi, orig, dest, inter) {
+	console.log("Hanoi iterativo");
+	
+	var stack = [];
+	var temp;
+	var finedelmondo = false;
+	while(!finedelmondo) {
+		while(nDischi!=1) {
+			// Salvo i valori attuali delle variabili nello stack.
+			stack.push(nDischi);
+			stack.push(orig);
+			stack.push(dest);
+			stack.push(inter);
+			
+			// Modifico i valori.
+			nDischi--;
+			temp = dest;
+			dest = inter;
+			inter = temp;
+		}
+		
+		console.log("Trasferisci un disco da " + orig + ' a ' + dest);
+		
+		if (stack.length == 0)
+			finedelmondo = true;
+		else {
+			inter = stack.pop();
+			dest = stack.pop();
+			orig = stack.pop();
+			nDischi = stack.pop();
+			
+			console.log("Trasferisci un disco da " + orig + ' a ' + dest);
+		
+			nDischi--;
+			temp = orig;
+			orig = inter;
+			inter = temp;
+		}
+	}
+}
+
+console.log("Hanoi ricorsivo");
+hanoiRicorsivo(5, 1, 3, 2);
+
+hanoiIterativo(3, 1, 3, 2);
+</script>
+</body>
+</html>

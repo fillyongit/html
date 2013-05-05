@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>MERGESORT</title>
+</head>
+<body>
+<h1>MERGESORT</h1>
+<script>
+
+	//var a = [33,21,7,48,28,13,65,17];
+	var a = [33,21,7,48];
+	var mergesort = function(a, primo, ultimo){
+		
+		var mezzo;
+		if (primo < ultimo){
+			mezzo = Math.round((primo + ultimo) / 2)-1;
+			console.log('Prima metà\nprimo: ' + primo + ' ultimo: ' + mezzo);
+			mergesort(a, primo, mezzo);
+			console.log('Seconda metà\nprimo: ' + (mezzo+1) + ' ultimo: ' + ultimo);
+			mergesort(a, mezzo+1, ultimo);
+			merge(a, primo, ultimo, mezzo);
+		}
+	};
+	
+	var b = [];
+	var merge = function(a, primo, ultimo, mezzo){
+		console.log('Merge\nprimo: ' + primo + ' ultimo: ' + ultimo + ' mezzo: ' + mezzo);
+		var i = primo;
+		var j = mezzo + 1;
+		var k = primo;
+		while(i<=mezzo && j<=ultimo){
+			if (a[i]<a[j]){
+				b[k] = a[i];
+				i++;
+			}
+			else {
+				b[k] = a[j];
+				j++;
+			}
+			k++;
+			console.log("b:" + b);
+		}
+		j=k;
+		for(var h=i; h<=mezzo; h++){
+			a[j] = a[h];
+			console.log("h:" + h + " a[j]=a[h]: a[" + j + "]=" + a[h]);
+			j++;
+		}
+		
+		for(var j=primo; j<=k-1; j++){
+			console.log("a[j]=b[j]: a[" + j + "]=" + b[j]);
+			a[j] = b[j];
+		}
+	};
+	
+	mergesort(a,0,3);
+	alert(a);
+</script>
+</body>
+</html>

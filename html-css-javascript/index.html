@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>HTML5 Sample</title>
+	<link rel="stylesheet" href="style.css" type="text/css" />
+	<link rel="alternate"  type="application/atom+xml" title="My Weblog feed" href="feed/atom_example.xml" />
+	<!-- <link rel="alternate"  type="application/rss+xml" title="My Weblog feed" href="feed/rss_example.xml" />  -->
+	<style>
+		/*
+		* Per i browser che non supportano l'html5 ma che 
+		* supportano lo styling per gli elementi sconosciuti,
+		* si da uno stile base a questi lelementi. Questo
+		* stile è corretto anche per l'html5 perchè tutti questi 
+		* elementi sono blocks.
+		* Esiste comunque un hack che viene mostrato sotto con un javascript.
+		*/
+		article,aside,details,figcaption,figure,
+		footer,header,hgroup,menu,nav,section { 
+		    display:block;
+		}	
+	</style>
+	<!--[if lt IE 9]>
+	<script>
+		// Si creano una copie "dummy" degli elementi nuovi dell'html5.
+		// In questo modo IE8 applica lo stile su questi anche se
+		// non lo conosce. Questo non provoca nessun effetto sugli altri browser
+		// che tra l'altro già applicano gli stili a elementi non noti.
+		// Solo ie8+ interpreta questo script perchè posto tra commenti condizionali
+		// che ie8+ interpreta come condizioni, mentre gli altri browser li ignorano.
+		// Questo script deve essere necessariamente posto nell'head perchè prima che ie
+		// costruisca il DOM.
+	  	var e = ("abbr,article,aside,audio,canvas,datalist,details," +
+			    "figure,footer,header,hgroup,mark,menu,meter,nav,output," +
+			    "progress,section,time,video").split(',');
+	  	for (var i = 0; i < e.length; i++) {
+	    	document.createElement(e[i]);
+	  	}
+	</script>
+	<![endif]-->
+</head>
+<body>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/modernizr-1.7.min.js"></script>
+<script src="js/geolocation/geo-location-javascript/js/geo.js"></script>
+<script src="js/geolocation/gears_init.js"></script>
+
+<script type="text/javascript">
+
+// ---------- GEOLOCATION --------------
+if (geo_position_js.init()) 
+{
+	  geo_position_js.getCurrentPosition(show_map, handle_error);
+}
+
+// Esempio di uso di Modernizr per verificare il support nativo del browser alla geolocazione.
+if (Modernizr.geolocation)
+{
+	navigator.geolocation.getCurrentPosition(show_map, handle_error);
+}
+else 
+{
+    // no native support; maybe try Gears?
+}
+
+function show_map(position) 
+{
+	  var latitude = position.coords.latitude;
+	  var longitude = position.coords.longitude;
+	  var accuracy = position.coords.accuracy;
+	  var altitudeAccuracy = position.coords.altitudeAccuracy;
+	  // let's show a map or do something interesting!
+alert(latitude + ' ' + longitude + ' ' + accuracy + ' ' + altitudeAccuracy);
+}
+
+function handle_error(err) 
+{
+	  alert("Errore: " + err.code);
+}
+
+//---------- LOCALSTORAGE --------------
+if (Modernizr.localstorage) 
+{
+	  // window.localStorage is available!
+	  if (localStorage["bar"] == null) 
+		  localStorage["bar"] = "foo";
+	  else
+		  alert(localStorage.getItem("bar"));
+
+} else {
+  // no native support for HTML5 storage :(
+  // maybe try dojox.storage or a third-party solution
+}
+
+//---------- FORM --------------
+$(document).bind('autofocus_ready', function() {
+    if (Modernizr.input.autofocus) {
+      $("#q").focus();
+    }
+  });
+  
+if (Modernizr.input.placeholder) {
+	  // your placeholder text should already be visible!
+}
+	
+if (!Modernizr.inputtypes.date) {
+	  // no native support for <input type="date"> :(
+	  // maybe build one yourself with Dojo or jQueryUI
+	}
+	
+if (!Modernizr.inputtypes.number) {
+	  // no native support for type=number fields
+	  // maybe try Dojo or some other JavaScript framework
+	}
+</script>
+
+
+<video id="movie" width="320" height="240" preload controls>
+  <source src="filmato.mp4" />
+  <source src="filmato.ogv" type='video/ogg; codecs="theora, vorbis"' />
+  <source src="filmato.webm" type='video/webm; codecs="vp8, vorbis"' />
+  <!-- <object width="320" height="240" type="application/x-shockwave-flash"
+    data="flowplayer-3.2.1.swf"> 
+    <param name="movie" value="flowplayer-3.2.1.swf" /> 
+    <param name="allowfullscreen" value="true" /> 
+    <param name="flashvars" value='config={"clip": {"url": "http://wearehugh.com/dih5/pr6.mp4", "autoPlay":false, "autoBuffering":true}}' /> 
+    <p>Download video as <a href="pr6.mp4">MP4</a>, <a href="pr6.webm">WebM</a>, or <a href="pr6.ogv">Ogg</a>.</p> 
+  </object>-->
+</video>
+<script type="text/javascript">
+  var v = document.getElementById("movie");
+  v.onclick = function() {
+    if (v.paused) {
+      v.play();
+    } else {
+      v.pause();
+    }
+  };
+</script>
+
+<section>
+<header>
+	  <hgroup>
+	    <h1>My Weblog</h1>
+	    <h2>A lot of effort went into making this effortless.</h2>
+	  </hgroup>
+	</header>
+
+	<article>
+		Article
+		<mark>Mark Twain</mark>
+	</article>
+	<aside>Aside</aside>
+	<footer>
+		<nav>
+			nav tag
+		</nav>
+	</footer>
+</section>
+
+<form>
+
+  Email <input type="email">
+  <br />
+  Url <input type="url">
+  <br />
+  Autofocus <input id="q" required autofocus>
+  <script>$(document).trigger('autofocus_ready');</script>
+  <br />
+  Numbers - spinbox: <input type="number"
+	       min="0"
+	       max="10"
+	       step="2"
+	       value="6">
+  <br />
+  Numbers - range: <input type="range"
+       min="0"
+       max="10"
+       step="2"
+       value="6">
+  <br />
+  Search: <input type="search">
+  <br />
+  <input type="submit" value="Go">
+</form>
+
+</body>
+</html>

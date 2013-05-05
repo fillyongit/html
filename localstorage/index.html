@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<!--  
+Modernizr sostituisce no-js con js se il browser ha il supporto attivato,
+Inoltre aggiunge tante altre classi, una per ogni feature nuova di html5 
+prefissate con no- se il browser non le supporta. Vedere con Chrome.
+ -->
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8" />
+<title>LocalStorage</title>
+<script src="../modernizr/js/modernizr-2.0.6.min.js"></script>
+</head>
+<body>
+<script>
+ Modernizr.load({
+	test: Modernizr.localstorage,
+	yep: 'js/db/storage.js',
+	nope: 'js/db/storage-polyfill.js'
+ });
+</script>
+</body>
+</html>

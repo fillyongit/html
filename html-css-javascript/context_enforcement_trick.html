@@ -1,0 +1,29 @@
+<html>
+<head></head>
+<body>
+<script>
+// Add a method to all functions to allow context enforcement.
+Function.prototype.bind = function(){ 
+  var fn = this, args = Array.prototype.slice.call(arguments), object = args.shift(); 
+  return function(){ 
+    return fn.apply(object, 
+      args.concat(Array.prototype.slice.call(arguments))); 
+  }; 
+}; 
+ 
+var Button = { 
+  click: function(value){ 
+    this.clicked = value; 
+  } 
+}; 
+ 
+var elem = document.createElement("li"); 
+elem.innerHTML = "Click me!"; 
+elem.onclick = Button.click.bind(Button, false); // se avessimo fatto: elem.click=Button.click il 'this' dentro Button.click sarebbe stato riferito all''elem'.
+document.getElementById("results").appendChild(elem); 
+ 
+elem.onclick(); 
+assert( Button.clicked === false, "The clicked property was correctly set on the object" );	
+</script>
+</body>
+</html>

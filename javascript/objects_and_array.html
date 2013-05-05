@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<script>
+var culo = [];
+culo['k1'] = true;
+culo['k2'] = false;
+alert(culo);
+alert(culo.length);
+
+delete culo['k1'];
+
+alert(culo);
+
+var culo = [];
+culo[1] = {c: 'sda'};
+culo[2] = {d: 'dfs'};
+alert(culo);
+alert(culo.length);
+
+delete culo[1]; // Il delete sembra funzionare anche con array non associativi (quindi non oggetti).
+
+alert(culo);
+alert(culo.length);
+</script>
+</head>
+<body>
+
+</body>
+</html>

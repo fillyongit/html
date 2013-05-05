@@ -1,0 +1,37 @@
+<script>
+// Esempio di implementazione del pattern facde applicato al javascript.
+// L'oggetto esposto dal modulo, denominato "facade", ha la responsabilità
+// di eseguire la logica del dominio applicativo, comunicando con un'interfaccia
+// implementata dall'oggetto privato "_private".
+
+var module = (function() {
+    var _private = {
+        i:5,
+        get : function() {
+            console.log('current value:' + this.i);
+        },
+        set : function( val ) {
+            this.i = val;
+        },
+        run : function() {
+            console.log('running');
+        },
+        jump: function(){
+            console.log('jumping');
+        }
+    };
+    return {
+        facade : function( args ) {
+            _private.set(args.val);
+            _private.get();
+            if ( args.run ) {
+                _private.run();
+            }
+        }
+    }
+}());
+ 
+ 
+module.facade({run: true, val:10});
+//outputs current value: 10, running
+</script>

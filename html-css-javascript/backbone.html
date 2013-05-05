@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<script src="js/backbone/jquery.min.js"></script>
+<script src="js/backbone/json2.js"></script>
+<script src="js/backbone/underscore-min.js"></script>
+<script src="js/backbone/backbone.js"></script>
+<script>
+$(document).ready(function(){
+		
+	var PARTNERS_GALLERY = "partners";
+	var STAFF_GALLERY = "staff";
+	
+	Backbone.sync = function(method, model) {
+		  console.log("I've been passed " + method + " with " + JSON.stringify(model));
+	};
+		
+	Photo = Backbone.Model.extend({
+	    defaults: {
+	        src: 'noimagevailable.jpg',
+	        title: 'Immagine non disponibile',
+	        id: 0
+	    },
+	    initialize: function(){
+	    	console.log('Photo initialization ' + this.get("src"));
+	        this.bind("change:src", function(){
+	            var src = this.get("src"); 
+	            console.log('Image source updated to ' + src)
+	        });
+	    },
+	    validate: function(attribs){
+	        if(attribs.src == "noimagevailable.jpg"){
+	            return "Remember to set a source for your image!";
+	        }
+	    },
+	    getSrc: function(){
+	        this.get("src");
+	    },
+	    setSrc: function( source ){
+	        this.set({ src: source });
+	    },
+	    getTitle: function(){
+	        this.get("title");
+	    },	    
+	    setTitle: function( title ){
+	        this.set({ title: title });
+	    }
+	});
+	 
+	PhotoCollection = Backbone.Collection.extend({
+	    model: Photo,
+	    initialize: function(){
+	    	console.log('PhotoCollection initialization');
+	    	
+	    	this.bind("add", function(photo) {
+	  		  	console.log("Aggiunta foto " + photo.get("title") + ', '  + photo.get("src"));
+	    	});
+	    }
+	});
+	
+	GalleryController = Backbone.Router.extend({
+		initialize: function(options) {
+			console.log("Router initialization");
+			this.showPhotos(options);
+		},
+		
+	    /* define the route and function maps for this controller */
+	    routes:{
+	    	 "/photos" : "showPhotos",
+	    	 "/photos/:id" : "showPhoto",
+	    },
+	    
+	    showPhotos: function(galleryName) {
+	    	console.log("GalleryController showPhotos");
+
+			var myPhotoCollection = new PhotoCollection(); // var myPhotoCollection = new PhotoCollection([myPhoto]);
+			myPhotoCollection.add([{id: 1, title: "Pluto", src: "foto1.jpg", thumb: "foto1thumb.jpg", didascalia: "Ciao è bello!"}, 
+			                       {id: 2, title: "Pippo", src: "foto2.jpg", thumb: "foto2thumb.jpg", didascalia: "Ciao è brutto!"}]);
+			/*myPhotoCollection.url = '/photos.txt';
+			myPhotoCollection.fetch({
+										success: function (collection, response){
+											alert(response);
+											alert(JSON.stringify(colection));
+										},
+										error: function (collection, response){
+											alert(response);
+											alert(JSON.stringify(colection));
+										}
+			});*/
+			window.myPhotoCollection = myPhotoCollection.sortBy(function(photo){
+			    return photo.get("title").toLowerCase();
+			});
+			
+			
+			var galleryView = new GalleryView({collection: myPhotoCollection, 
+											   el: $('#' + galleryName + '-gallery')});
+			galleryView.render();
+	    },
+	
+	    showPhoto: function(id) {
+	    	console.log("GalleryController showPhoto");  
+	    } 
+	});
+	
+	ZoomPhotoView = Backbone.View.extend({
+	
+		  //tagName: 'li', // Crea un elemento DOM "li" all'interno del quale appendere il template parsato.
+		  
+		  el: $('#photo-zoom'),
+	
+		  zoomPhotoTemplate: _.template($('#gallery-item-template').html()), // Cache the template function for a single photo.
+		  
+		  initialize: function(options) {
+			  console.log("ZoomPhotoView initialization");
+		  },	
+	
+		  render: function() {
+			console.log("ZoomPhotoView render");
+			$(this.el).css('display', 'block');
+			$(this.el).html(this.zoomPhotoTemplate(this.model.toJSON())); 
+		  	return this;
+		  },
+		  
+		  close:  function() {
+			$(this.el).css('display', 'none');
+		  }
+	});
+	
+	GalleryView = Backbone.View.extend({
+		
+		//Instead of generating a new element, bind to the existing skeleton of the App already present in the HTML.
+		// Altrimenti usavo una o tutte le proprietrà tagName, className e id per costruirmi il mio elemento
+		// base della view. Di default se non si specifica niene "el" equivale ad un div vuoto.
+	    //el: $("#gallery"),
+	    
+	    galleryTemplate: _.template($('#gallery-template').html()), // Cache the template function.
+	    
+	    initialize: function(options) {
+	    	console.log("GalleryView initialization");
+	    },
+	    
+	    events: {
+		    "mouseover .photo": "zoomPhoto",
+		    "mouseout .photo": "zoomOutPhoto"
+		},
+		
+	    render: function() {
+	    	console.log("GalleryView render");
+	    	console.log(JSON.stringify(this.collection.toJSON()));
+	    	// el viene impostato da fuori, dal chiamante passandolo come option di initialize.
+	    	$(this.el).html(this.galleryTemplate({photos: this.collection.toJSON()}));
+	    	return this;
+	    },
+	    
+	    zoomPhoto: function(event){
+	    	console.log("GalleryView zoomPhoto " + $(event.target).attr('data-id'));
+	    	
+	    	var photo = this.collection.get($(event.target).attr('data-id'));
+	    	this.view = new ZoomPhotoView({model: photo});
+	    	this.view.render();
+	    },
+	    
+	    zoomOutPhoto: function(event){
+	    	this.view.close();
+	    }
+	    
+	    /*addOne: function(photo) {
+	    	console.log("GalleryView addOne " + photo.get("src"));
+	        var view = new SinglePhotoView({model: photo});
+	        this.$("#gallery").append(view.render().el);
+	    },
+	      
+	    addAll: function() {
+	    	console.log("AppView addAll");
+	    	PhotoCollection.each(this.addOne);
+	    }*/
+	});
+	
+	var partnerGalleryController = new GalleryController('partners');
+	var staffGalleryController = new GalleryController('staff');
+	Backbone.history.start({pushState: false});
+});
+</script>
+</head>
+<body>
+	<ul id="partners-gallery"></ul>
+	<ul id="staff-gallery"></ul>
+	<div id="photo-zoom" style="display: none"></div>
+	
+	<script type="text/template" id="gallery-template">
+		<% _.each(photos, function(photo) { %> <li><img src="<%=photo.thumb%>" title="<%=photo.title%>" class="photo" data-id="<%= photo.id %>" /></li> <% }); %>
+	</script>
+	
+	<script type="text/template" id="gallery-item-template">
+		<img src="<%=src%>" title="<%=title%>" /><br />
+		<strong><%=title%></strong><br />
+		<%=didascalia%>
+	</script>
+</body>
+</html>

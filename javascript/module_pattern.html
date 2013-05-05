@@ -1,0 +1,39 @@
+<script>
+// Il pattern Module fa uso delle "immediately called functions" o "self-calling functions", che
+// di solito, come in questo caso, sono usate per creare un namespace del modulo.
+var basketModule = (function() {
+    var basket = []; //private
+    return { //exposed to public
+        addItem: function(values) {
+            basket.push(values);
+        },
+        getItemCount: function() {
+            return basket.length;
+        },
+        getTotal: function(){
+           var q = this.getItemCount(),p=0;
+            while(q--){
+                p+= basket[q].price; 
+            }
+            return p;
+        }
+    }
+}());
+
+//basketModule is an object with properties which can also be methods
+basketModule.addItem({item:'bread',price:0.5});
+basketModule.addItem({item:'butter',price:0.3});
+ 
+console.log(basketModule.getItemCount());
+console.log(basketModule.getTotal());
+ 
+//however, the following will not work:
+console.log(basketModule.basket);// (undefined as not inside the returned object)
+//console.log(basket); //(only exists within the scope of the closure)
+</script>
+
+<!-- 
+	Esistono dei framework che implementano questo pattern e possono essere usati
+	nelle applicazioni. Uno di questi è RequireJS http://requirejs.org/docs/api.html
+	(http://msdn.microsoft.com/en-us/scriptjunkie/ff943568)
+ -->

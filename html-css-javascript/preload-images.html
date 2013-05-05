@@ -1,0 +1,72 @@
+<!doctype html>
+
+<html>
+  <head>
+    <title>Preload images in Javascript</title>
+    <meta charset="utf-8" />
+
+    <script type="text/javascript">
+
+      var imageFiles = new Array("../images/images.jpg", "../images/images2.jpg", "../images/images3.jpg");
+      var imagesLoaded = new Number(0);
+
+      document.addEventListener("DOMContentLoaded", init, false);
+
+      function init()
+      {
+        var images = new Array();
+
+        console.log("It will proceed to preload the images.");
+
+        for(i=0; i<imageFiles.length; i++)
+          images[i] = loadImage(imageFiles[i]);
+      }
+
+      function loadImage(url)
+      {
+        var image = new Image();
+        image.addEventListener("load", imageLoaded, false);
+        image.src = url;
+        return image;
+      }
+
+      function imageLoaded()
+      {
+        imagesLoaded++;
+
+        if (imagesLoaded == imageFiles.length)
+          console.log("The images have been preloaded.");
+      }
+
+      
+      
+    // Alternativa con jQuery. NON FUNZIONA!!!.
+    
+    
+    function initJQuery(){
+
+    	preload([
+    		"../images/images.jpg",
+    		"../images/images2.jpg",
+    		"../images/images3.jpg"
+    	]);
+    	
+    	function preload(arrayOfImages) {
+    	    $(arrayOfImages).each(function(){
+    	        $('<img />')[0].src = this;
+    	        // Alternatively you could use:
+    	        // (new Image()).src = this;
+    	    });
+    	}
+   	  
+    }
+ 		
+    </script>
+
+  </head>
+
+  <body>
+  <img src="../images/images.jpg" onmouseover="this.src='../images/images2.jpg'" onmouseout="this.src='../images/images3.jpg'" />
+  </body>
+
+</html>

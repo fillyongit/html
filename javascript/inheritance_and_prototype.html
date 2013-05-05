@@ -1,0 +1,180 @@
+
+<script>
+// In Javascript le funzioni sono first-class object e sono dette first-class functions.
+// In Javascript gli oggetti sono dinamici nel senso che è possibile aggiugnere proprietà
+// e metodi anche dopo averli istanziati.
+// L'istanziazione di un oggetto tipo new Object() crea un nuovo oggetto che eredita da
+// Object.prototype.
+
+// La cosa interessant è che all'inizio dell'esecuzione di un pezzo di Javascriot c'è sempre
+// un global object. Tutte le variablili definite in questo scope possono essere anche riferite tramite
+// this. Ad es.:
+var x = 10;
+var o = { x: 15 };
+function f(){
+	alert(this.x);
+}
+f(); // Visto che non ho istanziato f(), this si riferisce all'oggetto globale.
+
+// Se invece vogliamo far puntare this ad un altro oggeto si può usare
+// call().
+f.call(o);
+
+/**** Object literal *****/
+var oldObject = {
+	     name : "Sabby",
+	     species: "cat",
+	     hello : function() { alert("hissss"); }
+	};
+	
+	
+	// oppure
+	
+/**** Simple object *****/
+oldObject = new Object();
+oldObject.name = "Sabby";
+// ...
+
+	// oppure
+	
+/**** Function constructor *****/
+// Forse questo è il migliore in assoluto per
+// creare ua gerarchia di oggetti, perchè permette
+// l'uso del prototype.
+// Quando una funzione è creata (in Js le funzini sono oggetti)
+// viene associato al prototype un oggetto vuoto (letteralmente un new Object())
+// di modo che tutti gli oggetti ereditino da Object.
+function oldObjectConstructor(name){
+		this.name = name;
+		this.species = "";
+		this.hello = function(){
+			alert(alert("hissss"));
+		}
+	}
+oldObject = new oldObjectConstructor("Sabby");
+// In questo caso l'oggetto tiene un riferimento al costruttore.
+alert(oldObject.constructor.toString());
+
+/**********************************************************************/
+// I simple object e gli object literal sono utili anche per simulare i namespace.
+
+// In un sistema prototipale, gli oggetti ereditano da oggetti.
+// Invece di creare classi creiamo oggetti prototipo.
+// In sostanza tutti gli oggetti sono ottenuti aggiungendo "dinamicamente"
+// proprietà e metodi ad oggetti vuoti.
+// Con i prototipi un oggetto può essere creato a partire da un altro oggetto
+// ma non deve essere lo stesso oggetto di partenza. In Js non si dichiara il tipo
+// di oggetto.
+
+// Ecco una utile funzione per creare oggetti figli di altri oggetti
+// senza inquinare il gloabl scope.
+if (typeof Object.create !== 'function') {
+    Object.create = function (o) {
+        function F() {}
+        F.prototype = o;
+        return new F();
+    };
+}
+
+newObject = Object.create(oldObject);
+
+// Posso aggiungere nuovi metodi e proprietà alla "classe"/prototipo
+// di newObject e queste immediatamente sono condivise con tutti gli
+// oggetti scaturiti da esso (tipo newObject appunto).
+// Non sarebbe stata la stessa identica cosa aggiungere questo newMethod nel costruttore
+// oldObjectConstructor. Le proprietà e i metodi che si aggiungono nel costruttore
+// sono ereditati dai "figli" ma non sono poi considivise.
+// Inoltre aggiungere metodi al prototipo ottimizza la memoria.
+oldObjectConstructor.prototype.newMethod = function(){
+	alert("Nuovo metodo aggiunto al prototipo");
+};
+
+newObject.newMethod();
+
+
+/***** Parasitic inheritance ******/
+// Invece di far ereditare una funzione/oggetto da un'altra, creo una funzione 
+// che nel costruttore istanzia la classe "Padre" e poi tramite l'uso di 
+// priviliged methods sovrascrive i metodi del padre.
+// L'esempio seguente contiente anche dei metodi di Function che 
+// aiutano nella creazione dei metodi e nell'ereditare da un'altra classe.
+Function.prototype.method = function (name, func) {
+    this.prototype[name] = func;
+    return this;
+};
+// Questa crea anche il metodo "uber" per chiamare metodi del padre.
+Function.method('inherits', function (parent) {
+    var d = {}, p = (this.prototype = new parent());
+    this.method('uber', function uber(name) {
+        if (!(name in d)) {
+            d[name] = 0;
+        }        
+        var f, r, t = d[name], v = parent.prototype;
+        if (t) {
+            while (t) {
+                v = v.constructor.prototype;
+                t -= 1;
+            }
+            f = v[name];
+        } else {
+            f = p[name];
+            if (f == this[name]) {
+                f = v[name];
+            }
+        }
+        d[name] += 1;
+        r = f.apply(this, Array.prototype.slice.apply(arguments, [1]));
+        d[name] -= 1;
+        return r;
+    });
+    return this;
+});
+function Parenizor(value) {
+    this.setValue(value);
+}
+Parenizor.method('setValue', function (value) {
+    this.value = value;
+    return this;
+});
+Parenizor.method('getValue', function () {
+    return this.value;
+});
+Parenizor.method('toString', function () {
+    return '(' + this.getValue() + ')';
+});
+
+function ZParenizor2(value) {
+    var that = new Parenizor(value);
+    that.toString = function () {
+        if (this.getValue()) {
+            return this.uber('toString');
+        }
+        return "-0-"
+    };
+    return that;
+}
+
+// Un'altro modo per ereditare da un oggetto padre è questo:
+function A() 
+{                        			// Define super class
+    this.x = 1;
+}
+A.prototype.DoIt = function()        // Define Method
+{
+    this.x += 1;
+}
+
+B.prototype = new A;                // Define sub-class
+B.prototype.constructor = B;
+function B()
+{
+    A.call(this);                    // Call super-class constructor (if desired)
+    this.y = 2;
+}
+B.prototype.DoIt = function()        // Define Method
+{
+    A.prototype.DoIt.call(this);    // Call super-class method (if desired)
+    this.y += 1;
+}
+ 
+</script>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<script type="text/javascript" src="js/gallery/jquery-1.6.3.min.js"></script>
+<script type="text/javascript" src="js/gallery/json2.js"></script>
+<script type="text/javascript" src="js/gallery/underscore-min.js"></script>
+<script type="text/javascript" src="js/gallery/backbone-min.js"></script>
+<script type="text/javascript" src="js/gallery/gallery.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	var myGalleryController = new GalleryController({galleryName: 'partners', dataSource: {id: 1, src: "", didscalia: "", thumb_src_sttr: ""}});
+	Backbone.history.start({pushState: false});
+});
+</script>
+<div id="partners-gallery"></div>
+<script type="text/template" id="gallery-template">
+<% 
+	var i = 0;
+	var clear = "";
+	_.each(photos, function(photo) { 
+		clear = (i >= 4 && i%4 == 0) ? "<div style='clear: both'>&nbsp;</div>" : "";
+%> 
+		<%=clear%>
+		<div class="gallery-item"><img <%=photo.thumb_src_attr%> title="<%=photo.title%>" class="photo" data-id="<%= photo.id %>" /><span><br /><%=photo.title%></span></div> 
+<% 
+		i++;
+	}); 
+%>
+</script>
+	
+<script type="text/template" id="gallery-item-template">
+	<img src="<%=src%>" title="<%=title%>" /><br />
+	<strong><%=title%></strong><br />
+	<%=didascalia%>
+</script>
+
+<div id="photo-zoom"></div>
+</body>
+</html>

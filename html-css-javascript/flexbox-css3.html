@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title></title>
+    <style>
+        #flexbox  
+        {
+          /* In WebKit e Gecko usare i prefissi -webkit e -gecko o -moz*/
+          display: -webkit-box;
+          display: box;
+          -webkit-box-orient: horizontal;
+          box-orient: horizontal;
+          
+          width: 500px;
+          height: 200px;
+          border: solid 1px red;
+        }
+         
+        #flexbox > p 
+        {
+            width: 100px;
+            border: solid 1px #000000;
+        }
+        
+        #flexbox > p:nth-child(3) 
+        {
+          -webkit-box-flex: 1;
+          box-flex: 1;
+        }
+        
+        /* Esempio di centratura di un elemento */
+        .centerbox {
+            /* basic styling */
+            width: 350px;
+            height: 95px;
+            font-size: 14px;
+            border: 1px solid #555;
+            background : #CFC;
+      
+            /* flexbox, por favor */
+            display: -webkit-box;
+            -webkit-box-orient: horizontal;
+            -webkit-box-pack: center;
+            -webkit-box-align: center;
+       
+            display: -moz-box;
+            -moz-box-orient: horizontal;
+            -moz-box-pack: center;
+            -moz-box-align: center;
+        
+            display: box;
+            box-orient: horizontal;
+            box-pack: center;
+            box-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="flexbox">
+      <p>child 1</p>
+      <p>child 2</p>
+      <p>child 3</p>
+    </div>
+
+    <div class="centerbox">
+      <textarea>Esempio di centratura di un elemento.</textarea>
+    </div>
+</body>
+</html>
