@@ -2,10 +2,40 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<meta name="viewport" content="width=320" />
-<title>Insert title here</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5 maximum-scale=1.0, target-densitydpi=device-dpi" />
+<title>Mobile examples</title>
+<link rel="apple-touch-icon" href="images/HTML5_Badge_64.png" />
+<link rel="apple-touch-icon-precomposed" href="images/HTML5_Badge_64.png" />
+<link rel="stylesheet" media="screen" href="css/style.css" />
+<link rel="stylesheet" media="screen and (-webkit-device-pixel-ratio:1.5)" href="css/hdpi.css" />      
+<script>
+	
+</script>
 </head>
 <body>
-<div style="background-color:green; width: 320px;">320px</div>
+<h1>Miscellanoues</h1>
+<h3>Risorse:</h3>
+<ul>
+	<li><a href="http://www.html5rocks.com/en/mobile/mobifying/#toc-meta-viewport">"Mobifying" Your HTML5 Site @html5rocks</a></li>
+	<li><a href="http://developer.android.com/reference/android/webkit/WebView.html">Building web pages to support different screen densities @android</a></li>
+</ul>
+<h3>Some examples:</h3>
+<div class="content">
+	The <strong>-webkit-device-pixel-ratio</strong> CSS media query. Use this to specify the screen densities 
+	for which this style sheet is to be used. The corresponding value should be either 
+	"0.75", "1", or "1.5", to indicate that the styles are for devices with low density, 
+	medium density, or high density screens, respectively.
+</div>
+
+<div class="content">
+	The <strong>target-densitydpi</strong> property for the viewport meta tag. You can use this to specify the target density for which the web page is designed, using the following values:
+	<ul>
+		<li>device-dpi - Use the device's native dpi as the target dpi. Default scaling never occurs.</li>
+		<li>high-dpi - Use hdpi as the target dpi. Medium and low density screens scale down as appropriate.</li>
+		<li>medium-dpi - Use mdpi as the target dpi. High density screens scale up and low density screens scale down. This is also the default behavior.</li>
+		<li>low-dpi - Use ldpi as the target dpi. Medium and high density screens scale up as appropriate.</li>
+		<li>- Specify a dpi value to use as the target dpi (accepted values are 70-400).</li>
+	</ul>
+</div>
 </body>
 </html>
