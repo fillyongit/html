@@ -2,7 +2,7 @@
 <html manifest="example.appcache">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Insert title here </title>
 <link rel="stylesheet" href="css/style.css" type="text/css" />
 <script>
 	var appCache = window.applicationCache;
@@ -39,6 +39,7 @@
 	  window.applicationCache.addEventListener('updateready', function(e) {
 		console.log(window.applicationCache.status);
 	    if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+	      window.applicationCache.update();
 	      // Browser downloaded a new app cache.
 	      // Swap it in and reload the page to get the new hotness.
 	      window.applicationCache.swapCache();
