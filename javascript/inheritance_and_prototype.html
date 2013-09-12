@@ -1,12 +1,12 @@
 
 <script>
 // In Javascript le funzioni sono first-class object e sono dette first-class functions.
-// In Javascript gli oggetti sono dinamici nel senso che Ë possibile aggiugnere propriet‡
+// In Javascript gli oggetti sono dinamici nel senso che √® possibile aggiugnere propriet√†
 // e metodi anche dopo averli istanziati.
 // L'istanziazione di un oggetto tipo new Object() crea un nuovo oggetto che eredita da
 // Object.prototype.
 
-// La cosa interessant Ë che all'inizio dell'esecuzione di un pezzo di Javascriot c'Ë sempre
+// La cosa interessante √® che all'inizio dell'esecuzione di un pezzo di Javascriot c'√® sempre
 // un global object. Tutte le variablili definite in questo scope possono essere anche riferite tramite
 // this. Ad es.:
 var x = 10;
@@ -16,7 +16,7 @@ function f(){
 }
 f(); // Visto che non ho istanziato f(), this si riferisce all'oggetto globale.
 
-// Se invece vogliamo far puntare this ad un altro oggeto si puÚ usare
+// Se invece vogliamo far puntare this ad un altro oggeto si pu√≤ usare
 // call().
 f.call(o);
 
@@ -38,10 +38,10 @@ oldObject.name = "Sabby";
 	// oppure
 	
 /**** Function constructor *****/
-// Forse questo Ë il migliore in assoluto per
-// creare ua gerarchia di oggetti, perchË permette
+// Forse questo √® il migliore in assoluto per
+// creare ua gerarchia di oggetti, perch√® permette
 // l'uso del prototype.
-// Quando una funzione Ë creata (in Js le funzini sono oggetti)
+// Quando una funzione √® creata (in Js le funzini sono oggetti)
 // viene associato al prototype un oggetto vuoto (letteralmente un new Object())
 // di modo che tutti gli oggetti ereditino da Object.
 function oldObjectConstructor(name){
@@ -61,8 +61,8 @@ alert(oldObject.constructor.toString());
 // In un sistema prototipale, gli oggetti ereditano da oggetti.
 // Invece di creare classi creiamo oggetti prototipo.
 // In sostanza tutti gli oggetti sono ottenuti aggiungendo "dinamicamente"
-// propriet‡ e metodi ad oggetti vuoti.
-// Con i prototipi un oggetto puÚ essere creato a partire da un altro oggetto
+// propriet√† e metodi ad oggetti vuoti.
+// Con i prototipi un oggetto pu√≤ essere creato a partire da un altro oggetto
 // ma non deve essere lo stesso oggetto di partenza. In Js non si dichiara il tipo
 // di oggetto.
 
@@ -78,11 +78,11 @@ if (typeof Object.create !== 'function') {
 
 newObject = Object.create(oldObject);
 
-// Posso aggiungere nuovi metodi e propriet‡ alla "classe"/prototipo
+// Posso aggiungere nuovi metodi e propriet√† alla "classe"/prototipo
 // di newObject e queste immediatamente sono condivise con tutti gli
 // oggetti scaturiti da esso (tipo newObject appunto).
 // Non sarebbe stata la stessa identica cosa aggiungere questo newMethod nel costruttore
-// oldObjectConstructor. Le propriet‡ e i metodi che si aggiungono nel costruttore
+// oldObjectConstructor. Le proprietÔøΩ e i metodi che si aggiungono nel costruttore
 // sono ereditati dai "figli" ma non sono poi considivise.
 // Inoltre aggiungere metodi al prototipo ottimizza la memoria.
 oldObjectConstructor.prototype.newMethod = function(){
@@ -154,7 +154,7 @@ function ZParenizor2(value) {
     return that;
 }
 
-// Un'altro modo per ereditare da un oggetto padre Ë questo:
+// Un'altro modo per ereditare da un oggetto padre √® questo:
 function A() 
 {                        			// Define super class
     this.x = 1;
