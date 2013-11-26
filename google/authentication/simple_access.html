@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+	<script>
+      function appendResults(text) {
+        var results = document.getElementById('results');
+        results.appendChild(document.createElement('P'));
+        results.appendChild(document.createTextNode(text));
+      }
+
+      function makeRequest() {
+        var request = gapi.client.urlshortener.url.get({
+          'shortUrl': 'http://goo.gl/fbsS'
+        });
+        request.execute(function(response) {
+          console.log(response);
+          appendResults(response.longUrl);
+        });
+      }
+
+      function load() {
+        gapi.client.setApiKey('AIzaSyDStcCNnp8WdZ9oaQIiuspYkqIKVGsgh74');
+        gapi.client.load('urlshortener', 'v1', makeRequest);
+      }
+    </script>
+    <script src="https://apis.google.com/js/client.js?onload=load"></script>
+</head>
+<body>
+	 <h1>Simple access</h1>
+	 <h3>The only credential required for this example is the API key</h3>
+	 <div id="results"></div>
+</body>
+</html>
