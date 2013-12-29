@@ -1,0 +1,23 @@
+POST https://www.googleapis.com/prediction/v1.6/projects/132517065098/trainedmodels?key={YOUR_API_KEY}
+
+Content-Type:  application/json
+Authorization:  Bearer ya29.1.AADtN_Vl58W3mLO8GrATENHYTH7nhXZ6dMyr6CkwEbDTDU8pz3lmTA4hWHbopBUUuw
+X-JavaScript-User-Agent:  Google APIs Explorer
+ 
+{
+ "trainingInstances": [
+  {
+   "csvInstance": [
+    "1.71,\"M\",1.74,1.62,\"France\"",
+    "1.51,\"F\",1.61,1.50,\"India\"",
+    "1.55,\"M\",1.66,1.55,\"India\"",
+    "1.52,\"F\",1.68,1.54,\"Spain\"",
+    "1.51,\"F\",1.61,1.50,\"Italy\"",
+    "1.70,\"F\",1.81,1.78,\"Italy\"",
+    "1.77,\"M\",1.78,1.59,\"France\""
+   ],
+   "output": "regression"
+  }
+ ],
+ "id": "human-heights"
+}

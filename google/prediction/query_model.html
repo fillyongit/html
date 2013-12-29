@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+  </head>
+  <body>
+  	<h1>QUERY THE HUMAN-DOGS MODEL</h1>
+    <!--Add a button for the user to click to initiate auth sequence -->
+    <button id="authorize-button" style="visibility: hidden">Authorize</button>
+    <script type="text/javascript">
+      // Enter a client ID for a web application from the Google Developer Console.
+      // The provided clientId will only work if the sample is run directly from
+      // https://google-api-javascript-client.googlecode.com/hg/samples/authSample.html
+      // In your Developer Console project, add a JavaScript origin that corresponds to the domain
+      // where you will be running the script.
+      var clientId = '132517065098.apps.googleusercontent.com';
+
+      // Enter the API key from the Google Develoepr Console - to handle any unauthenticated
+      // requests in the code.
+      // The provided key works for this sample only when run from
+      // https://google-api-javascript-client.googlecode.com/hg/samples/authSample.html
+      // To use in your own application, replace this API key with your own.
+      var apiKey = 'AIzaSyDStcCNnp8WdZ9oaQIiuspYkqIKVGsgh74';
+
+      // To enter one or more authentication scopes, refer to the documentation for the API.
+      var scopes = 'https://www.googleapis.com/auth/prediction';
+
+      // Use a button to handle authentication the first time.
+      function handleClientLoad() {
+        gapi.client.setApiKey(apiKey);
+        window.setTimeout(checkAuth,1);
+      }
+
+      // Authorized request is here.
+      function checkAuth() {
+        gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true}, handleAuthResult);
+      }
+
+
+      function handleAuthResult(authResult) {
+        var authorizeButton = document.getElementById('authorize-button');
+        console.log(authResult);
+        if (authResult && !authResult.error) {
+          authorizeButton.style.visibility = 'hidden';
+		  document.getElementById('content').textContent = "Authorized. Make a prediction!";
+        } else {
+          authorizeButton.style.visibility = '';
+          authorizeButton.onclick = handleAuthClick;
+        }
+      }
+		
+      /**
+      *The first call to gapi.auth.authorize can trigger popup blockers. The best way to prevent this is to set up a 
+      * user-triggered action (like the Login button described here) that calls gapi.auth.authorize with immediate: false parameter.
+      */
+      function handleAuthClick(event) {
+        gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: false}, handleAuthResult);
+        return false;
+      }
+      
+      function makePrediction(){
+    	var predictReq = gapi.client.request({
+    		"path": "prediction/v1.6/projects/132517065098/trainedmodels/human-dogs/predict",
+    		"method": "POST",
+    		"body": {
+    			"input": {
+    				"csvInstance": ["M",30,76,8,"yes","country"]
+    			}
+    		}
+    	});
+    	predictReq.execute(function(jsonResp, rawResp) {
+           	console.log(jsonResp);
+           	console.log(rawResp);
+        });   
+      }
+    </script>
+    <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+    <div id="content"></div>
+    <input type="button" name="predict" value="Predict" onclick="makePrediction();" />
+  </body>
+</html>
