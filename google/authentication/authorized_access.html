@@ -27,6 +27,8 @@
   	<h1>Google authorized request</h1>
   	<h3><a href="https://developers.google.com/api-client-library/javascript/features/authentication">https://developers.google.com/api-client-library/javascript/features/authentication</a></h3>
     <div>E' fatta tramite la chiamata al metodo: gapi.auth.authorize() a cui viene passto il clientid e lo scope.</div>
+    <div>In genere le chiamate alle API di Google che prevedono l'autorizzazione da parte dell'utente di cui si vogliono ottenere dati, devono passare un token di accesso OAuth2.0.</div>
+    <div>Nei casi in cui non è prevista l'autorizzazione basta la API Key (<a href="simple_access.html">simple API access</a>).</div>
     <!--Add a button for the user to click to initiate auth sequence -->
     <button id="authorize-button" style="visibility: hidden">Authorize</button>
     <script type="text/javascript">
