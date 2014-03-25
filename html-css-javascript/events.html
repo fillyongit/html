@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+	<meta charset="utf-8" />
+	<title>HTML5 Sample</title>
+	<script type="text/javascript">
+		function fireEvent(element,event){
+		    if (document.createEventObject){
+			    // dispatch for IE
+			    var evt = document.createEventObject();
+			    return element.fireEvent('on'+event,evt)
+		    }
+		    else{
+			    // dispatch for firefox + others
+			    // In realtà adesso createEvent è deprecato in favore del costruttore Event('nome_evento').
+			    // Es.: var evt = new Event('change');
+			    var evt = document.createEvent("HTMLEvents");
+			    evt.initEvent(event, true, true ); // event type,bubbling,cancelable
+			    return !element.dispatchEvent(evt);
+		    }
+		}
+	</script>
+</head>
+<body>
+<form>
+	<h3>onload non può essere applicato agli elementi html</h3>
+	<select onload="alert('ciao');">
+		<option>1</option>
+	</select>
+	
+	<h1>Fire an event programmatically.</h1>
+	<section>
+	Questo sembra il metodo migliore soprattuto per eventi come il "change".
+	<br />Neanche il trigger di JQuery funziona in questi casi.
+	</section>
+	<input type="text" id="test">
+	<script>
+	var obj = document.getElementById("test");
+	obj.addEventListener('change', function (e){alert('hi');});
+	fireEvent(obj,'change');
+	</script>
+</form>
+</body>
+</html>
