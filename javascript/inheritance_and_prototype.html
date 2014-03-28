@@ -26,7 +26,8 @@ var oldObject = {
 	     species: "cat",
 	     hello : function() { alert("hissss"); }
 	};
-	
+// In questo caso non ha un construttore. Stampa quello dell'Object.
+console.log(oldObject.constructor.toString());	
 	
 	// oppure
 	
@@ -41,7 +42,7 @@ oldObject.name = "Sabby";
 // Forse questo è il migliore in assoluto per
 // creare ua gerarchia di oggetti, perchè permette
 // l'uso del prototype.
-// Quando una funzione è creata (in Js le funzini sono oggetti)
+// Quando una funzione è creata (in Js le funzioni sono oggetti)
 // viene associato al prototype un oggetto vuoto (letteralmente un new Object())
 // di modo che tutti gli oggetti ereditino da Object.
 function oldObjectConstructor(name){
@@ -53,7 +54,7 @@ function oldObjectConstructor(name){
 	}
 oldObject = new oldObjectConstructor("Sabby");
 // In questo caso l'oggetto tiene un riferimento al costruttore.
-alert(oldObject.constructor.toString());
+console.log(oldObject.constructor.toString());
 
 /**********************************************************************/
 // I simple object e gli object literal sono utili anche per simulare i namespace.
@@ -91,6 +92,7 @@ oldObjectConstructor.prototype.newMethod = function(){
 
 newObject.newMethod();
 
+console.log(newObject instanceof oldObjectConstructor);
 
 /***** Parasitic inheritance ******/
 // Invece di far ereditare una funzione/oggetto da un'altra, creo una funzione 
@@ -163,12 +165,17 @@ A.prototype.DoIt = function()        // Define Method
 {
     this.x += 1;
 }
+var a = new A();
+a.DoIt();
+console.log('A.x:' + a.x);
 
 B.prototype = new A;                // Define sub-class
-B.prototype.constructor = B;
+B.prototype.constructor = B;		// Se non facciamo così il costruttore di B ufficialmente è A, però da B() ci si passa comunque quando si istanzia
+							        // un oeggetto di tipo B e risulterebbe comunque istanza di A.
 function B()
 {
     A.call(this);                    // Call super-class constructor (if desired)
+    this.x += 4;
     this.y = 2;
 }
 B.prototype.DoIt = function()        // Define Method
@@ -176,5 +183,11 @@ B.prototype.DoIt = function()        // Define Method
     A.prototype.DoIt.call(this);    // Call super-class method (if desired)
     this.y += 1;
 }
+var b = new B();
+b.DoIt();
+console.log('B constructor:' +b.constructor.toString());
+console.log('B instance of A:' + (b instanceof A));
+console.log('B.x:' +b.x);
+console.log('B.y:' +b.y);
  
 </script>
