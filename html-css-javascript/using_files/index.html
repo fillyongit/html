@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<script>
+function handleFiles(files) {
+	console.log(files);
+}
+</script>
+</head>
+<body>
+<input type="file" id="input" multiple onchange="handleFiles(this.files)">
+</body>
+</html>
