@@ -15,7 +15,11 @@
       function init()
       {
         var images = new Array();
-
+        
+        document.getElementById('theimage').addEventListener('load', function(event) {
+      	  console.log('Image loaded');
+        });
+        
         console.log("It will proceed to preload the images.");
 
         for(i=0; i<imageFiles.length; i++)
@@ -34,6 +38,8 @@
       {
         imagesLoaded++;
 
+        console.log(imagesLoaded);
+        		
         if (imagesLoaded == imageFiles.length)
           console.log("The images have been preloaded.");
       }
@@ -41,7 +47,18 @@
       
       
     // Alternativa con jQuery. NON FUNZIONA!!!.
-    
+    // Forse perchè:
+    // Doesn't the image element need to be inserted into the DOM to ensure the browser caches it? 
+    // L'altro codice funziona perchè usa l'Image Object:
+    	
+    /* 
+    Da MDN https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Using_images:
+    	
+	Another option is to create new HTMLImageElement objects in our script. To do this, you can use the convenient Image() constructor:
+	var img = new Image();   // Create new img element
+	img.src = 'myImage.png'; // Set source path
+	When this script gets executed, the image starts loading.
+	*/
     
     function initJQuery(){
 
@@ -66,7 +83,12 @@
   </head>
 
   <body>
-  <img src="../images/images.jpg" onmouseover="this.src='../images/images2.jpg'" onmouseout="this.src='../images/images3.jpg'" />
+  <h3>CIAO!</h3>
+  <script>
+  	console.log('Body');
+  </script>
+  <h4>Precaricare l'immagine 1 dovrebbe essere inutile visto che sembra caricarsi prima di arrivare al codice eseguito dalla funzione loadImage.</h4>
+  <img id="theimage" src="../images/images.jpg" onmouseover="this.src='../images/images2.jpg'" onmouseout="this.src='../images/images3.jpg'" />
   </body>
 
 </html>
