@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>
+Se clicchi la prima volta sullo schermo verrà chiamata la funzione touch che effettua un cambiamento di stile e di layout e poi legge lo stile (per 3 volte)<br />
+La seconda volta che clicchi invece viene chiamato touchlast che effettua i 3 cambiamenti di stile prima e poi legge i stili sopo.<br />
+In questo modo l'operazione del browser di ricalcolo degli stili e quindi di "repaint" della pagina viene effettuata una sola volta, perchè i browser <br >/
+cercano sempre di ottimizzare le operazioni di reflow e repaint cercando di accumularel in una coda e pii eseguirle tutte in una volta.</h1>
+<script>
+	var bodystyle = document.body.style;
+	var computed;
+	if (document.body.currentStyle) {
+	  computed = document.body.currentStyle;
+	} else {
+	  computed = document.defaultView.getComputedStyle(document.body, '');
+	}
+	
+	
+	function touch(){
+	  bodystyle.color = 'red';
+	  //bodystyle.padding = '1px';
+	  tmp = computed.backgroundColor;
+	  bodystyle.color = 'white';
+	  //bodystyle.padding = '2px';
+	  tmp = computed.backgroundImage;
+	  bodystyle.color = 'green';
+	  //bodystyle.padding = '3px';
+	  tmp = computed.backgroundAttachment;
+	}
+	
+	function touchlast() {
+		bodystyle.color = 'yellow';
+		bodystyle.padding = '4px';
+		bodystyle.color = 'pink';
+		bodystyle.padding = '5px';
+		bodystyle.color = 'blue';
+		bodystyle.padding = '6px';
+		tmp = computed.backgroundColor;
+		tmp = computed.backgroundImage;
+		tmp = computed.backgroundAttachment;
+	
+	}
+	
+	var a = false;
+	document.body.onclick = function() {
+	  if (!a) {
+	    touch();
+	  } else {
+	    touchlast();
+	  }
+	  a = !a;
+	
+	}
+</script>
+</body>
+</html>

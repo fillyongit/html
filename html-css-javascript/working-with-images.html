@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<img id="image" src="../images/eyes.png" />
+<script>
+// Per assicurarsi che l'evento load venga sempre scatenato anche per immagini cached.
+document.getElementById('image').addEventListener("load", function() {
+	  console.log('loaded');
+}, false);
+if (document.getElementById('image').complete || 
+	document.getElementById('image').complete === undefined ) {
+	var _src = document.getElementById('image').src;
+	document.getElementById('image').src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+	document.getElementById('image').src = _src;
+}
+</script>
+</body>
+</html>
