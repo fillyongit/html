@@ -47,6 +47,7 @@ myModule('C:\\Users\\Alessio\\AppData\\Roaming\\npm\\node_modules\\learnyounode\
 // Http client
 var http = require('http');
 http.get(process.argv[2], function(res) {
+  // res è un oggetto Response che è un ReadableStream.
   console.log("Got response: " + res.statusCode);
   console.log('HEADERS: ' + JSON.stringify(res.headers));
   //res.setEncoding('utf8'); 
@@ -55,9 +56,27 @@ http.get(process.argv[2], function(res) {
 	  // E' sempre un Buffer
 	  console.log(chunk.toString());
   })
-   res.on('end', function(){
+  res.on('end', function(){
 	  console.log('end');
   })
 }).on('error', function(e) {
   console.log("Got error: " + e.message);
+});
+
+console.log('*******************************');
+console.log('HTTP COLLECT');
+console.log('*******************************');
+
+var bl = require('bl');
+// bl is a storage object for collections of Node Buffers
+http.get(process.argv[2], function(response) {
+	response.pipe(bl(function (err, data) {
+		// Note that when you use the callback method like this, 
+		// the resulting data parameter is a concatenation of all Buffer objects in the list
+	    if (err)
+	      return console.error(err)
+	    data = data.toString()
+	    console.log(data.length)
+	    console.log(data)
+	  }));
 });
