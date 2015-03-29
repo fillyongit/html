@@ -5,6 +5,19 @@
 <title>Insert title here</title>
 </head>
 <body>
-
+<script>
+	var newUser = function(data) {
+	  console.log(data);
+	  //document.getElementById("table").innerHTML +=
+	  //    ""+data.time+""+data.id+""+data.userAgent+"";
+	}
+	 
+	var ws = new WebSocket('ws://localhost:1337'); // ws://echo.websocket.org // utile per un echo websocket.
+	ws.onmessage = function (event) {
+	    newUser(JSON.parse(event.data));
+	};
+	
+	
+</script>
 </body>
 </html>
