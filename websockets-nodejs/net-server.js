@@ -1,5 +1,9 @@
+// Crea un server TCP.
 var net = require('net');
 var server = net.createServer(function(socket){
+	
+	// Socket è un ReadableStream.
+	
 	var date = new Date();
 	socket.write(date.getFullYear() + '-' + 
 			date.getMonth() + '-' + 
