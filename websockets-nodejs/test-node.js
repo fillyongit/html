@@ -9,19 +9,27 @@ console.log(process.argv);
 var fs = require('fs');
 var path = require('path');
 
+// path.resolve: è come se facessi
+// cd __dirname
+// cd media
+// ..
+// alla fine resituisce il percorso assoluto a file.txt
+var filetxt = path.resolve(__dirname, 'media', 'file.txt');
+var mediadir = path.resolve(__dirname, 'media');
+
 //Legge un file in modo sincrono
-var buffer = fs.readFileSync('C:\\Users\\Alessio\\AppData\\Roaming\\npm\\node_modules\\learnyounode\\node_apidoc\\fs.html');
+var buffer = fs.readFileSync(filetxt);
 console.log('Sync-> ' + buffer.toString().split('\n').length);
 
 //Legge un file in modo asincrono
-fs.readFile('C:\\Users\\Alessio\\AppData\\Roaming\\npm\\node_modules\\learnyounode\\node_apidoc\\fs.html', function(err,buffer){
+fs.readFile(filetxt, function(err,buffer){
 	console.log(err);
 	if (!err)
 		console.log('Async-> ' + buffer.toString().split('\n').length);
 });
 
 // Legge una directory in modo asincrono e mostra i file con estensione html
-fs.readdir('C:\\Users\\Alessio\\AppData\\Roaming\\npm\\node_modules\\learnyounode\\node_apidoc', function(err,list){
+fs.readdir(mediadir, function(err,list){
 	var ext = '';
 	var filteredList = list.filter(function(filename, i){
 		if (path.extname(filename).substr(1) == 'html')//process.argv[2])
@@ -35,7 +43,7 @@ fs.readdir('C:\\Users\\Alessio\\AppData\\Roaming\\npm\\node_modules\\learnyounod
 // Legge una directory in modo asincrono e mostra i file con una certa estensione usando un modulo.
 // La lettura della directory viene fatta nel modulo e la stampa a video viene fatta qua nel chiamante.
 var myModule = require('./test-module');
-myModule('C:\\Users\\Alessio\\AppData\\Roaming\\npm\\node_modules\\learnyounode\\node_apidoc', 'html', function(err,data){
+myModule(mediadir, 'html', function(err,data){
   if (err)
 	    return console.error('There was an error:', err)
 
@@ -50,11 +58,11 @@ http.get(process.argv[2], function(res) {
   // res è un oggetto Response che è un ReadableStream.
   console.log("Got response: " + res.statusCode);
   console.log('HEADERS: ' + JSON.stringify(res.headers));
-  //res.setEncoding('utf8'); 
+  //res.setEncoding('utf8'); // La codifica a utf8 converte il buffer in stringa automaticamente senza dover fare toString().
   res.on('data', function(chunk){
 	  // L'argomento chunk è un chunk di dati. 
 	  // E' sempre un Buffer
-	  console.log(chunk.toString());
+	  console.log('%s - %d bytes', chunk.toString(), chunk.length);
   })
   res.on('end', function(){
 	  console.log('end');
