@@ -12,7 +12,7 @@
 	  //    ""+data.time+""+data.id+""+data.userAgent+"";
 	}
 	 
-	var ws = new WebSocket('ws://localhost:1337'); // ws://echo.websocket.org // utile per un echo websocket.
+	var ws = new WebSocket('ws://localhost:8080'); // ws://echo.websocket.org // utile per un echo websocket.
 	ws.onmessage = function (event) {
 	    newUser(JSON.parse(event.data));
 	};
