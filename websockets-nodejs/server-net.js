@@ -16,6 +16,7 @@ var server = net.createServer(function(socket){
 		console.log('client disconnected');
 	})
 });
+// unix domain socket. Es.: /tmp/test.sock
 server.listen(process.argv[2], function(){
 	console.log('Server bound on %j', server.address());
 });
