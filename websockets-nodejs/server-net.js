@@ -1,7 +1,7 @@
 // Crea un server TCP.
 var net = require('net');
 var server = net.createServer(function(socket){
-	
+	// Connection callback. E' come server.on('connection', function(socket){ ... });
 	// Socket è un ReadableStream.
 	
 	var date = new Date();
@@ -18,5 +18,6 @@ var server = net.createServer(function(socket){
 });
 // unix domain socket. Es.: /tmp/test.sock
 server.listen(process.argv[2], function(){
+	// Listenimg callback.
 	console.log('Server bound on %j', server.address());
 });
