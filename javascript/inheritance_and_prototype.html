@@ -69,6 +69,7 @@ console.log(oldObject.constructor.toString());
 
 // Ecco una utile funzione per creare oggetti figli di altri oggetti
 // senza inquinare il gloabl scope.
+// Object.create è parte di ECMA5. Qui c'è anche un polyfill.
 if (typeof Object.create !== 'function') {
     Object.create = function (o) {
         function F() {}
