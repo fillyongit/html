@@ -1,61 +1,59 @@
-var http = require('http'),
-    dispatcher = require('httpdispatcher'),
-    WebSocketServer = require('ws').Server;
-
+/**
+ * Eseguire come utente apache se si vuoe poi che uno script php possa scrivere sullo stesso local socket del server.
+ * sudo -u www-data /path/to/node server-ws.js
+ */
+var net = require('net');
+    WebSocketServer = require('ws').Server
 // https://github.com/websockets/ws
- 
-dispatcher.setStatic('static');
  
 var adminWS = [];
  
-var notify = function(req, res) {
+var notify = function(event) {
   for(c in adminWS)
     c.send(JSON.stringify({
-      ip: req.connection.remoteAddress,
-      userAgent: req.headers['user-agent'],
       time: (new Date()).getTime()
     }));
-}
+};
  
-dispatcher.onGet("/homepage", function(req, res) {
-    res.end("<h1>Homepage</h1");
-    notify(req, res);
+var server = net.createServer(function(socket){
+	// Connection callback. E' come server.on('connection', function(socket){ ... });
+	// Socket è un ReadableStream.
+	socket.on('data', function(buffer){
+		console.log('data received...' + buffer.toString() + ' ' + buffer.length);
+		//notify(buffer);
+		wss.broadcast(buffer.toString());
+	});
+	socket.on('end', function(){
+		console.log('client disconnected');
+	});
 });
- 
-var server = http.createServer(function (req, res) {
-	console.log(req.origin);
-    dispatcher.dispatch(req, res);
+server.listen('/tmp/bac.sock', function(){
+	console.log('Server bound on %j', server.address());
 });
- 
-server.listen(8080, '127.0.0.1', function(err, data){
-	console.log(data);
+server.on('error', function (e) {
+	  if (e.code == 'EADDRINUSE') {
+	    console.log('Server socket in use!');
+	  }
 });
-var wss = new WebSocketServer({server: server});
+
+var wss = new WebSocketServer({port: 8080}, function(err, data) {
+	// Listening callback.
+	console.log('WebSocketServer listening...');
+});
+wss.broadcast = function broadcast(data) {
+	  wss.clients.forEach(function each(client) {
+	    client.send(data);
+	  });
+};
 wss.on('connection', function(ws) {
-	console.log('nuova connessione');
-	console.log(ws);
-	setInterval(function() { 
-/*
-var mysql      = require('mysql');
-var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : '< MySQL username >',
-  password : '< MySQL password >',
-  database : '<your database name>'
-});
-
-connection.connect();
-
-connection.query('SELECT * from < table name >', function(err, rows, fields) {
-  if (!err)
-    console.log('The solution is: ', rows);
-  else
-    console.log('Error while performing Query.');
-});
-
-connection.end();
-*/
-		ws.send(JSON.stringify({msg: 'connessione avvenuta'})) 
-	}, 2000);
+	console.log('Nuova connessione');
+//	setInterval(function() {
+//		ws.send(JSON.stringify({msg: 'connessione avvenuta'})); 
+//	}, 2000);
     adminWS.push(ws);
+});
+wss.on('error', function (e) {
+	  if (e.code == 'EADDRINUSE') {
+	    console.log('Address in use!');
+	  }
 });
