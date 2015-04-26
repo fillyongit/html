@@ -6,7 +6,8 @@
 var net = require('net'),
     WebSocketServer = require('ws').Server,
     log4js = require('log4js'),
-    fs = require('fs');
+    fs = require('fs'),
+    bl = require('bl');
 
 console.log(__dirname + '/server-ws.log');
 
@@ -31,6 +32,12 @@ process.on('SIGBREAK', function() {
 	logger.info('Processo interrotto.');
 	process.exit(0);
 });
+process.on('SIGTERM', function() {
+	// Su windows.
+	logger.info('SIGTERM ricevuto. Processo interrotto.');
+	wss.broadcast('SIGTERM');
+	process.exit(0);
+});
 
 //var adminWS = [];
  
@@ -50,14 +57,38 @@ fs.unlink(socketPath, function(err){
 var server = net.createServer(function(socket){
 	// Connection callback. E' come server.on('connection', function(socket){ ... });
 	// Socket è un ReadableStream.
+	//socket.setEncoding('utf8');
+	socket.setTimeout(30000);
 	socket.on('data', function(buffer){
-		logger.info('data received...' + buffer.toString() + ' ' + buffer.length);
-		//notify(buffer);
-		wss.broadcast(buffer.toString());
+		logger.info('Dati ricevuti da: ' + socket.remoteAddress + ':' + socket.remotePort);
+		//logger.info('data received...' + buffer.toString() + ' ' + buffer.length + ' ' + socket.bytesRead);
 	});
+	socket.pipe(bl(function(err,buffer){
+		var data = buffer.toString();
+		try {
+			data = JSON.parse(data);
+			if (data.pid == process.pid) {
+				wss.broadcast(data.data);
+			}
+			else {
+				logger.warn('Dati ricevuti non validi: PID non corrispondente.');
+			}
+		}
+		catch(e){
+			logger.warn('Dati ricevuti non validi: non è una stringa JSON valida.');
+		}
+		logger.info(buffer.toString() + ' ' + buffer.length);
+	}));
 	socket.on('end', function(){
-		logger.info('client disconnected');
+		logger.info('Fine trasmissione client. Bytes ricevuti: ' + socket.bytesRead);
 	});
+	socket.on('close', function(){
+		logger.info('Socket chiuso completamente');
+	});
+	socket.on('timeout', function(){
+		logger.info('Timeout');
+		socket.destroy();
+	});	
 });
 server.listen(socketPath, function(){
 	logger.info('Server bound on %j', server.address());
@@ -81,7 +112,7 @@ wss.broadcast = function broadcast(data) {
 	  });
 };
 wss.on('connection', function(ws) {
-	logger.info('Nuova connessione');
+	logger.info('Nuova connessione WebSocket: ');
 //	setInterval(function() {
 //		ws.send(JSON.stringify({msg: 'connessione avvenuta'})); 
 //	}, 2000);
@@ -89,6 +120,6 @@ wss.on('connection', function(ws) {
 });
 wss.on('error', function (e) {
 	  if (e.code == 'EADDRINUSE') {
-	    logger.error('Address in use!');
+	    logger.error('WebSocketServer: indirizzo già usato');
 	  }
 });

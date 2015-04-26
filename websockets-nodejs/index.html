@@ -14,7 +14,9 @@
 	 
 	var ws = new WebSocket('ws://localhost:8080'); // ws://echo.websocket.org // utile per un echo websocket.
 	ws.onmessage = function (event) {
-	    newUser(JSON.parse(event.data));
+		console.log(event.data);
+		console.log(event.data.length);
+	    //newUser(JSON.parse(event.data));
 	};
 	
 	
