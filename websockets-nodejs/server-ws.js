@@ -102,7 +102,7 @@ server.on('error', function (e) {
 	  }
 });
 
-var wss = new WebSocketServer({port: 8080}, function(err, data) {
+var wss = new WebSocketServer({port: process.argv[2]}, function(err, data) {
 	// Listening callback.
 	logger.info('WebSocketServer listening...');
 });

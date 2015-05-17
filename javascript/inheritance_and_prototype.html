@@ -79,6 +79,9 @@ if (typeof Object.create !== 'function') {
 }
 
 newObject = Object.create(oldObject);
+newObject.species = '1,2,3';
+console.log(Object.getPrototypeOf(newObject));
+
 
 // Posso aggiungere nuovi metodi e proprietà alla "classe"/prototipo
 // di newObject e queste immediatamente sono condivise con tutti gli
@@ -88,7 +91,7 @@ newObject = Object.create(oldObject);
 // sono ereditati dai "figli" ma non sono poi considivise.
 // Inoltre aggiungere metodi al prototipo ottimizza la memoria.
 oldObjectConstructor.prototype.newMethod = function(){
-	alert("Nuovo metodo aggiunto al prototipo");
+	console.log("Nuovo metodo aggiunto al prototipo" + this.species);
 };
 
 newObject.newMethod();
@@ -170,8 +173,6 @@ var a = new A();
 a.DoIt();
 console.log('A.x:' + a.x);
 
-B.prototype = new A;                // Define sub-class
-B.prototype.constructor = B;		// Se non facciamo così il costruttore di B ufficialmente è A, però da B() ci si passa comunque quando si istanzia
 							        // un oeggetto di tipo B e risulterebbe comunque istanza di A.
 function B()
 {
@@ -179,6 +180,10 @@ function B()
     this.x += 4;
     this.y = 2;
 }
+							        
+B.prototype = Object.create(A.prototype);                // Define sub-class
+B.prototype.constructor = B;		// Se non facciamo così il costruttore di B ufficialmente è A, però da B() ci si passa comunque quando si istanzia
+
 B.prototype.DoIt = function()        // Define Method
 {
     A.prototype.DoIt.call(this);    // Call super-class method (if desired)
