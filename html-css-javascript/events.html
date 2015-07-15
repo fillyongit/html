@@ -39,6 +39,21 @@
 	obj.addEventListener('change', function (e){alert('hi');});
 	fireEvent(obj,'change');
 	</script>
+	
+	<div id="pippo">
+		<div id="pluto">clicca qui</div>
+	</div>
+	<script>
+	document.getElementById("pippo").addEventListener('click', function(e){
+		 console.log('pippo ' + e.target.id);
+		 console.log('pippo ' + e.currentTarget.id);
+	}, false);
+	
+	document.getElementById("pluto").addEventListener('click', function(e){
+		 console.log('pluto ' + e.target.id);
+		 console.log('pluto ' + e.currentTarget.id);
+	}, false);
+	</script>
 </form>
 </body>
 </html>
