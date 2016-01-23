@@ -78,25 +78,100 @@ if (typeof Object.create !== 'function') {
     };
 }
 
-newObject = Object.create(oldObject);
+function newObjectConstructor() {
+	this.p1 = 'p1';
+}
+
+// Le 3 seguenti istruzioni sembrano equivalenti, con l'unica differenza che l'ultima non rappsresenta 
+// un'oggetto oldObjectConstructor istanziato e quindi la proprietà name ruslta undefined e non "Sabby".
+newObjectConstructor.prototype = oldObject;
+newObjectConstructor.prototype = Object.create(oldObject);
+newObjectConstructor.prototype = Object.create(oldObjectConstructor.prototype);
+
+var newObject = new newObjectConstructor();
 newObject.species = '1,2,3';
-console.log(Object.getPrototypeOf(newObject));
+console.log('My name is: ' + newObject.name);
+console.log('GetPrototypeOf -> ' + Object.getPrototypeOf(newObject));
 
 
 // Posso aggiungere nuovi metodi e proprietà alla "classe"/prototipo
 // di newObject e queste immediatamente sono condivise con tutti gli
 // oggetti scaturiti da esso (tipo newObject appunto).
 // Non sarebbe stata la stessa identica cosa aggiungere questo newMethod nel costruttore
-// oldObjectConstructor. Le propriet� e i metodi che si aggiungono nel costruttore
+// oldObjectConstructor. Le proprietà e i metodi che si aggiungono nel costruttore
 // sono ereditati dai "figli" ma non sono poi considivise.
 // Inoltre aggiungere metodi al prototipo ottimizza la memoria.
 oldObjectConstructor.prototype.newMethod = function(){
-	console.log("Nuovo metodo aggiunto al prototipo" + this.species);
+	console.log("Nuovo metodo aggiunto al prototipo: " + this.species);
 };
 
 newObject.newMethod();
 
 console.log(newObject instanceof oldObjectConstructor);
+
+/****** Come implementare l'ereditarietà ******/
+var Person = function() {
+  this.canTalk = true;
+};
+
+Person.prototype.greet = function() {
+  if (this.canTalk) {
+    console.log('Hi, I am ' + this.name);
+  }
+};
+
+var Employee = function(name, title) {
+  Person.call(this);
+  this.name = name;
+  this.title = title;
+};
+
+Employee.prototype = Object.create(Person.prototype);
+Employee.prototype.constructor = Employee;
+
+Employee.prototype.greet = function() {
+  if (this.canTalk) {
+    console.log('Hi, I am ' + this.name + ', the ' + this.title);
+  }
+};
+
+var Customer = function(name) {
+  Person.call(this);
+  this.name = name;
+};
+
+Customer.prototype = Object.create(Person.prototype);
+Customer.prototype.constructor = Customer;
+
+var Mime = function(name) {
+  Person.call(this);
+  this.name = name;
+  this.canTalk = false;
+};
+
+Mime.prototype = Object.create(Person.prototype);
+Mime.prototype.constructor = Mime;
+
+var bob = new Employee('Bob', 'Builder');
+var joe = new Customer('Joe');
+var rg = new Employee('Red Green', 'Handyman');
+var mike = new Customer('Mike');
+var mime = new Mime('Mime');
+
+bob.greet();
+// Hi, I am Bob, the Builder
+
+joe.greet();
+// Hi, I am Joe
+
+rg.greet();
+// Hi, I am Red Green, the Handyman
+
+mike.greet();
+// Hi, I am Mike
+
+mime.greet();
+
 
 /***** Parasitic inheritance ******/
 // Invece di far ereditare una funzione/oggetto da un'altra, creo una funzione 
