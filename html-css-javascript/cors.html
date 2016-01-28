@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+	<meta charset="utf-8" />
+	<title>CORS</title>
+	<script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
+</head>
+<body>
+<script>
+// To make a CORS request you simply use XMLHttpRequest
+// quindi anche l'api ajax di jQuery va bene.
+// XMLHttpRequest genera l'header Origin nella richiesta
+// se il server ha tra i suoi Access-Control-Allow-Origin il dominio
+// o un pattern che matcha con il dominio passato in Origin allora
+// il ajax può mandare la richiesta al server e il server può rispondere.
+$.get('http://www.google.it/', { name: "John", time: "2pm" },  function( data ) {
+	 alert( 'Successful cross-domain AJAX request.' );
+});
+
+function myCallback(data){
+   console.log("JSONP");
+   console.log(data);
+}
+
+</script>
+<script type="text/javascript" src="http://twitter.com/status/user_timeline/padraicb.json?count=10&callback=myCallback" crossorigin></script>
+</body>
+</html>
