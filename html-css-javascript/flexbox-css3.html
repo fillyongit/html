@@ -2,57 +2,80 @@
 <html lang="en">
 <head>
     <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5 maximum-scale=1.0, target-densitydpi=device-dpi" />
     <style>
         #flexbox  
         {
           /* In WebKit e Gecko usare i prefissi -webkit e -gecko o -moz*/
-          display: -webkit-box;
-          display: box;
-          -webkit-box-orient: horizontal;
-          box-orient: horizontal;
-          
-          width: 500px;
-          height: 200px;
+          display: -webkit-flex;
+          display: flex;
+          flex-flow: row;
           border: solid 1px red;
         }
-         
-        #flexbox > p 
+        #flexbox p  {
+        	flex: 1 1 auto;
+        	background: green;
+        	margin: 2px;
+        	width: 30px; /* To make the transition work nicely.  (Transitions to/from
+                      "width:auto" are buggy in Gecko and Webkit, at least.
+                      See http://bugzil.la/731886 for more info.) */
+
+		    -webkit-transition: width 0.7s ease-out;
+		    transition: width 0.7s ease-out;
+		    -webkit-order: 2;
+             order: 2;
+        }
+        #flexbox p:nth-child(1) {
+       		flex: 3 0 auto;
+ 		    -webkit-order: 1;
+            order: 1;      		
+        }
+        
+        /* PER SMALL SCREEN SIZE */
+        #flexbox-horiz-collpase  
         {
-            width: 100px;
-            border: solid 1px #000000;
+          /* In WebKit e Gecko usare i prefissi -webkit e -gecko o -moz*/
+          display: -webkit-flex;
+          display: flex;
+          flex-flow: row wrap;
+          border: solid 1px red;
+          width: 100%;
         }
-        
-        #flexbox > p:nth-child(3) 
-        {
-          -webkit-box-flex: 1;
-          box-flex: 1;
+        #flexbox-horiz-collpase p {
+            flex: 1 1 auto;
+        	background: green;
+        	margin: 2px;
+			width: 418px;
+		    -webkit-transition: width 0.7s ease-out;
+		    transition: width 0.7s ease-out;
+		    -webkit-order: 2;
+            order: 2;    
+         }
+         #flexbox p:nth-child(2) {
+         	flex: 1 1 auto;
+ 		    -webkit-order: 1;
+            order: 1;      		
         }
-        
-        /* Esempio di centratura di un elemento */
-        .centerbox {
-            /* basic styling */
-            width: 350px;
-            height: 95px;
-            font-size: 14px;
-            border: 1px solid #555;
-            background : #CFC;
-      
-            /* flexbox, por favor */
-            display: -webkit-box;
-            -webkit-box-orient: horizontal;
-            -webkit-box-pack: center;
-            -webkit-box-align: center;
-       
-            display: -moz-box;
-            -moz-box-orient: horizontal;
-            -moz-box-pack: center;
-            -moz-box-align: center;
-        
-            display: box;
-            box-orient: horizontal;
-            box-pack: center;
-            box-align: center;
-        }
+             
+        /* CENTRATURA BOX */
+        .vertical-box {
+		  display: flex;
+		  height: 400px;
+		  width: 400px;
+		  flex-flow: column;
+		}
+		.horizontal-box {
+		  display: flex;
+		  flex-flow: row;
+		}
+		.spacer {
+		  flex: auto;
+		  background-color: black;
+		}
+		.centered-element {
+		  flex: none;
+		  background-color: white;
+		}
     </style>
 </head>
 <body>
@@ -62,8 +85,20 @@
       <p>child 3</p>
     </div>
 
-    <div class="centerbox">
-      <textarea>Esempio di centratura di un elemento.</textarea>
+    <div id="flexbox-horiz-collpase">
+      <p>child 1</p>
+      <p>child 2</p>
+      <p>child 3</p>
     </div>
+    
+	<div class="vertical-box">
+	  <div class="spacer"></div>
+	  <div class="centered-element horizontal-box">
+	    <div class="spacer"></div>
+	    <div class="centered-element">Centered content</div>
+	     <div class="spacer"></div>
+	  </div>
+	  <div class="spacer"></div>
+	</div>
 </body>
 </html>
