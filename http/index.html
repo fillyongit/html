@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>HTTP PREFLIGHT REQUEST</title>
+<script>
+var xmlhttp = new XMLHttpRequest();
+var url = 'http://php5/dummy.php';
+var body = '<?xml version="1.0"?><person><name>Arun</name></person>';
+    
+function callOtherDomain(){
+  if(xmlhttp)
+    {
+	  xmlhttp.open('POST', url, true);
+	  xmlhttp.setRequestHeader('X-PINGOTHER', 'pingpong');
+	  xmlhttp.setRequestHeader('Content-Type', 'application/xml');
+	  xmlhttp.onreadystatechange = function(){console.log(xmlhttp)};
+	  xmlhttp.send(body); 
+    }
+}
+</script>
+</head>
+<body style="font-family: arial">
+<div>
+Unlike simple requests (discussed above), "preflighted" requests first send an HTTP request by the OPTIONS method to the resource on the other domain, in order to determine whether the actual request is safe to send.  Cross-site requests are preflighted like this since they may have implications to user data.  In particular, a request is preflighted if:
+<br />
+It uses methods other than GET, HEAD or POST.  Also, if POST is used to send request data with a Content-Type other than application/x-www-form-urlencoded, multipart/form-data, or text/plain, e.g. if the POST request sends an XML payload to the server using application/xml or text/xml, then the request is preflighted.
+<br />
+It sets custom headers in the request (e.g. the request uses a header such as X-PINGOTHER)
+</div>
+<br /><br />
+<div>
+Guarda il taffico network generato da qeuesta pagina con gli strumenti per sviluppatori 
+<button onclick="callOtherDomain()">AVVIA TEST</button>
+<br><br>
+In the example above, line 3 creates an XML body to send with the POST request in line 8.  Also, on line 9, a "customized" (non-standard) HTTP request header is set (X-PINGOTHER: pingpong).  Such headers are not part of the HTTP/1.1 protocol, but are generally useful to web applications.  Since the request (POST) uses a Content-Type of application/xml, and since a custom header is set, this request is preflighted.
+</div>
+<pre>
+var invocation = new XMLHttpRequest();
+var url = 'http://bar.other/resources/post-here/';
+var body = '<?xml version="1.0"?><person><name>Arun</name></person>';
+    
+function callOtherDomain(){
+  if(invocation)
+    {
+      invocation.open('POST', url, true);
+      invocation.setRequestHeader('X-PINGOTHER', 'pingpong');
+      invocation.setRequestHeader('Content-Type', 'application/xml');
+      invocation.onreadystatechange = handler;
+      invocation.send(body); 
+    }
+}
+</pre>
+</body>
+</html>
