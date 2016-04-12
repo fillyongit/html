@@ -2,16 +2,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Web Socket client</title>
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<!--  script src="http://localhost:8080/socket.io/socket.io.js" -->
 </head>
 <body>
 <script>
-	var newUser = function(data) {
-	  console.log(data);
-	  //document.getElementById("table").innerHTML +=
-	  //    ""+data.time+""+data.id+""+data.userAgent+"";
-	}
-	 
 	var ws = new WebSocket('ws://localhost:8080'); // ws://echo.websocket.org // utile per un echo websocket.
 	ws.onmessage = function (event) {
 		console.log(event.data);
@@ -19,7 +15,27 @@
 	    //newUser(JSON.parse(event.data));
 	};
 	
-	
+	// socket.io
+	var socket = io(
+			"http://localhost:8080/news", 
+			{"timeout": 5000, "reconnectionAttempts": 3}
+	);
+  	socket.on('connect', function (data) {
+    	console.log('Connesso');
+  	});
+  	socket.on('data', function (data) {
+    	console.log(data);
+  	});
+	socket.on('reconnect_error', function(e) {
+		console.log('WebSocket reconnect_error: ' + e);
+	});
+	socket.on('reconnect_failed', function(e) {
+		console.log('WebSocket reconnect_failed');
+		// Il server websocket è irraggiungibile. Inizializza ajax log-polling.
+	});
+	socket.on('disconnect', function(e) {
+		console.log('WebSocket disconnect: ' + e);
+	});
 </script>
 </body>
 </html>
