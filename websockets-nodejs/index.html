@@ -8,12 +8,21 @@
 </head>
 <body>
 <script>
-	var ws = new WebSocket('ws://localhost:8080'); // ws://echo.websocket.org // utile per un echo websocket.
+	var ws = new WebSocket('ws://localhost:8080/socket.io'); // ws://echo.websocket.org // utile per un echo websocket.
+	ws.onopen = function (event) {
+		console.log(event);
+		ws.send("Here's some text that the server is urgently awaiting!"); 
+	};
+	ws.onerror = function (error) {
+		  console.log(error.data);
+	};
 	ws.onmessage = function (event) {
+		console.log('Native WebSocket');
 		console.log(event.data);
 		console.log(event.data.length);
 	    //newUser(JSON.parse(event.data));
 	};
+	ws.close();
 	
 	// socket.io
 	var socket = io(
