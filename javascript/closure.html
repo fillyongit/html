@@ -1,7 +1,7 @@
 <script>
-// Javascript Ë un linguaggio che usa il lexical scope (o static scope), cioË
-// la visibilit‡ di una variabile Ë collegata alla "porzione" o blocco
-// di codice della funzione nella quale Ë definita (nel global scope altrimenti),
+// Javascript √® un linguaggio che usa il lexical scope (o static scope), cio√®
+// la visibilit√† di una variabile √® collegata alla "porzione" o blocco
+// di codice della funzione nella quale √® definita (nel global scope altrimenti),
 // come accade per quasi tutti i linguaggi tranne quelli (pochi) che usano
 // il dynamic scoping.
 
@@ -14,10 +14,23 @@ function parentFunction() {
   return childFunction;
 }
 
-var child = parentFunction();
+var child = parentFunction(); // Esegue parentFunction che restituisce la funzione childFunction.
 child();
 
-// Nonostante parentFunction() sia gi‡ stata eseguita la variabile interna
+// Nonostante parentFunction() sia gi√† stata eseguita la variabile interna
 // a child() ancora tiene un riferimento a quella definita in parentFunction(),
-// cioË in pratica l'ambiente locale dei parentFunction() esiste ancora.
+// cio√® in pratica l'ambiente locale dei parentFunction() esiste ancora.
+
+
+// Ricorsivit√† delle closures nelle inner functions (scope chaining).
+function A(x) {
+  function B(y) {
+    function C(z) {
+      console.log(x + y + z);
+    }
+    C(3);
+  }
+  B(2);
+}
+A(1);
 </script>
