@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>HTML5 Sample</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script>
+	$(document).ready(function(){
+		var height = $(document).height();
+    	console.log([height, $(window).height(), $(window).scrollTop()]);
+    	
+		$(window).scroll(function(){
+			height = $(document).height();
+	    	console.log([height, $(window).height(), $(window).scrollTop(), $("#box").clientHeight]);
+		});
+		$(window).resize(function() {
+			$(window).trigger("scroll");
+		});
+		$(window).trigger("scroll");
+    	
+	});
+	</script>
+</head>
+
+<body style="background: url('../images/1280px-Bologna-SanPetronioPiazzaMaggiore1.jpg') top left no-repeat; background-size: contain;">
+	<div id="box" style="height: 1000px">sdfsdf</div>
+</body>
+</html>
