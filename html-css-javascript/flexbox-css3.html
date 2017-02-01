@@ -4,101 +4,85 @@
     <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5 maximum-scale=1.0, target-densitydpi=device-dpi" />
     <style>
-        #flexbox  
-        {
-          /* In WebKit e Gecko usare i prefissi -webkit e -gecko o -moz*/
-          display: -webkit-flex;
-          display: flex;
-          flex-flow: row;
-          border: solid 1px red;
-        }
-        #flexbox p  {
-        	flex: 1 1 auto;
-        	background: green;
-        	margin: 2px;
-        	width: 30px; /* To make the transition work nicely.  (Transitions to/from
-                      "width:auto" are buggy in Gecko and Webkit, at least.
-                      See http://bugzil.la/731886 for more info.) */
-
-		    -webkit-transition: width 0.7s ease-out;
-		    transition: width 0.7s ease-out;
-		    -webkit-order: 2;
-             order: 2;
-        }
-        #flexbox p:nth-child(1) {
-       		flex: 3 0 auto;
- 		    -webkit-order: 1;
-            order: 1;      		
-        }
-        
-        /* PER SMALL SCREEN SIZE */
-        #flexbox-horiz-collpase  
-        {
-          /* In WebKit e Gecko usare i prefissi -webkit e -gecko o -moz*/
-          display: -webkit-flex;
-          display: flex;
-          flex-flow: row wrap;
-          border: solid 1px red;
-          width: 100%;
-        }
-        #flexbox-horiz-collpase p {
-            flex: 1 1 auto;
-        	background: green;
-        	margin: 2px;
-			width: 418px;
-		    -webkit-transition: width 0.7s ease-out;
-		    transition: width 0.7s ease-out;
-		    -webkit-order: 2;
-            order: 2;    
-         }
-         #flexbox p:nth-child(2) {
-         	flex: 1 1 auto;
- 		    -webkit-order: 1;
-            order: 1;      		
-        }
-             
-        /* CENTRATURA BOX */
-        .vertical-box {
+		 #container > div {
 		  display: flex;
-		  height: 400px;
-		  width: 400px;
-		  flex-flow: column;
+		  font-family: "Courier New", "Lucida Console", monospace;
 		}
-		.horizontal-box {
-		  display: flex;
-		  flex-flow: row;
+		
+		#container > div > div {
+		  width: 50px;
+		  height: 50px;
+		  background: linear-gradient(-45deg, #788cff, #b4c8ff);
 		}
-		.spacer {
-		  flex: auto;
-		  background-color: black;
+		
+		#flex-start {
+		  justify-content: flex-start;
 		}
-		.centered-element {
-		  flex: none;
-		  background-color: white;
+		
+		#center {
+		  justify-content: center;
 		}
+		
+		#flex-end {
+		  justify-content: flex-end;
+		}
+		
+		#space-between {
+		  justify-content: space-between;
+		}
+		
+		#space-around {
+		  justify-content: space-around;
+		}
+		
+		#space-evenly {
+		  justify-content: space-evenly;
+		}       
     </style>
 </head>
 <body>
-    <div id="flexbox">
-      <p>child 1</p>
-      <p>child 2</p>
-      <p>child 3</p>
-    </div>
+  <div id="container">
+  <p>justify-content: flex-start</p>
+  <div id="flex-start">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
 
-    <div id="flexbox-horiz-collpase">
-      <p>child 1</p>
-      <p>child 2</p>
-      <p>child 3</p>
-    </div>
-    
-	<div class="vertical-box">
-	  <div class="spacer"></div>
-	  <div class="centered-element horizontal-box">
-	    <div class="spacer"></div>
-	    <div class="centered-element">Centered content</div>
-	     <div class="spacer"></div>
-	  </div>
-	  <div class="spacer"></div>
-	</div>
+  <p>justify-content: flex-end</p>
+  <div id="flex-end">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <p>justify-content: center</p>
+  <div id="center">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <p>justify-content: space-between</p>
+  <div id="space-between">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <p>justify-content: space-around</p>
+  <div id="space-around">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+<p>justify-content: space-evenly</p>
+  <div id="space-evenly">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+</div>
 </body>
 </html>
